@@ -7,7 +7,7 @@ k近邻法(k-nearest neighbors)是由Cover和Hart于1968年提出的，它是懒
 - 取离测试样本最近的`k`个训练样本
 - “投票法”选出在这k个样本中出现最多的类别，就是预测的结果
 
-> 距离衡量的标准有很多，常见的有：$$L_p$$距离、切比雪夫距离、马氏距离、巴氏距离、余弦值等。
+> 距离衡量的标准有很多，常见的有：![0](https://chart.googleapis.com/chart?cht=tx&chl=L_p)距离、切比雪夫距离、马氏距离、巴氏距离、余弦值等。
 
 什么意思呢？先来看这张图
 
@@ -26,10 +26,11 @@ k近邻法(k-nearest neighbors)是由Cover和Hart于1968年提出的，它是懒
 
 先来回顾一下欧氏距离的定义(摘自维基百科)：<br>
 > 在欧几里得空间中，点 x = (x1,...,xn) 和 y = (y1,...,yn) 之间的欧氏距离为<br>
- $$d(x,y):={\sqrt  {(x_{1}-y_{1})^{2}+(x_{2}-y_{2})^{2}+\cdots +(x_{n}-y_{n})^{2}}}={\sqrt  {\sum _{{i=1}}^{n}(x_{i}-y_{i})^{2}}}$$<br>
+![1](https://chart.googleapis.com/chart?cht=tx&chl=d(x,y):={\sqrt%20{(x_{1}-y_{1})^{2}+(x_{2}-y_{2})^{2}+\cdots%20+(x_{n}-y_{n})^{2}}}={\sqrt%20{\sum%20_{{i=1}}^{n}(x_{i}-y_{i})^{2}}})
+
  
-> 向量 $${\displaystyle {\vec {x}}}$$的自然长度，即该点到原点的距离为<br>
- $$\|{\vec  {x}}\|_{2}={\sqrt  {|x_{1}|^{2}+\cdots +|x_{n}|^{2}}}$$<br>
+> 向量![2](https://chart.googleapis.com/chart?cht=tx&chl={\displaystyle%20{\vec%20{x}}})的自然长度，即该点到原点的距离为<br>
+ ![](https://chart.googleapis.com/chart?cht=tx&chl=\|{\vec%20{x}}\|_{2}={\sqrt%20{|x_{1}|^{2}+\cdots%20+|x_{n}|^{2}}})<br>
  它是一个纯数值。在欧几里得度量下，两点之间线段最短。
 
 现在给出六个训练样本，分为三类，每个样本有4个特征，编号为7的`名称`是我们要预测的。
@@ -44,7 +45,7 @@ k近邻法(k-nearest neighbors)是由Cover和Hart于1968年提出的，它是懒
 |6|6.7|3.3|5.7|2.1|Iris virginica|
 |7|5.5|2.5|4.0|1.3|    ?    |
 
-按照之前说的步骤，我们来计算测试样本到各个训练样本的距离。例如到第一个样本的距离 \\d_{1}=\sqrt{(4.9 - 5.5)^2 + (3.1 - 2.5)^2 + (1.5 - 4.0)^2 + (0.1 - 1.3)^2} = 2.9\\
+按照之前说的步骤，我们来计算测试样本到各个训练样本的距离。例如到第一个样本的距离![](https://chart.googleapis.com/chart?cht=tx&chl=d_{1}=\sqrt{(4.9%20-%205.5)^2%20+%20(3.1%20-%202.5)^2%20+%20(1.5%20-%204.0)^2%20+%20(0.1%20-%201.3)^2}%20=%202.9)
 
 写一个函数来执行这个操作吧
 
@@ -107,7 +108,7 @@ print("Distance to 6:", calc_distance(np.array([6.7, 3.3, 5.7, 2.1]), testSample
 
 ![不平衡](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/P2.png)
 
-从直观上可以看出X应该属于$$\omega_{1}$$，这是理所应当的。对于Y看起来应该属于$$\omega_{1}$$，但事实上在k范围内，更多的点属于$$\omega_{2}$$，这就造成了错误分类。<br>
+从直观上可以看出X应该属于![](https://chart.googleapis.com/chart?cht=tx&chl=\omega_{1})，这是理所应当的。对于Y看起来应该属于![](https://chart.googleapis.com/chart?cht=tx&chl=\omega_{1})，但事实上在k范围内，更多的点属于![](https://chart.googleapis.com/chart?cht=tx&chl=\omega_{2})，这就造成了错误分类。<br>
 
 ## 一个结论
 
@@ -154,16 +155,16 @@ def euclideanDistance_two_loops(train_X, test_X):
 ### L2 Distance
 
 此处参考[CSDNfrankzd的博客](https://blog.csdn.net/frankzd/article/details/80251042)<br>
-记测试集矩阵P的大小为$$M*D$$，训练集矩阵C的大小为$$N*D$$（测试集中共有M个点，每个点为D维特征向量。训练集中共有N个点，每个点为D维特征向量） <br><br>
-记$$P_{i}$$是P的第i行$$P_i = [ P_{i1}\quad P_{i2} \cdots P_{iD}]$$，记$$C_{j}$$是C的第j行$$C_j = [ C_{j1} C_{j2} \cdots \quad C_{jD}]$$
+记测试集矩阵P的大小为![](https://chart.googleapis.com/chart?cht=tx&chl=M*D)，训练集矩阵C的大小为![](https://chart.googleapis.com/chart?cht=tx&chl=N*D)（测试集中共有M个点，每个点为D维特征向量。训练集中共有N个点，每个点为D维特征向量） <br><br>
+记![](https://chart.googleapis.com/chart?cht=tx&chl=P_{i})是P的第i行![](https://chart.googleapis.com/chart?cht=tx&chl=P_i%20=%20[%20P_{i1}\quad%20P_{i2}%20\cdots%20P_{iD}])，记![](https://chart.googleapis.com/chart?cht=tx&chl=C_{j})是C的第j行![](https://chart.googleapis.com/chart?cht=tx&chl=C_j%20=%20[%20C_{j1}%20C_{j2}%20\cdots%20\quad%20C_{jD}])
 - 首先计算Pi和Cj之间的距离dist(i,j) <br><br>
-$$d(P_i,C_j) = \sqrt{(P_{i1}-C_{j1})^2+(P_{i2}-C_{j2})^2+\cdots+(P_{iD}-C_{jD})^2}\\ =\sqrt{(P_{i1}^2+P_{i2}^2+\cdots+P_{iD}^2)+(C_{j1}^2+C_{j2}^2+\cdots+C_{jD}^2)-2\times(P_{i1}C_{j1}+P_{i2}C_{j2}+\cdots+P_{iD}C_{iD})}\\=\sqrt{\left \| P_i\right \|^2+\left\|C_j\right\|^2-2\times P_iC_j^T}$$
+![1](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l21.gif)
 <br><br>
 - 我们可以推广到距离矩阵的第i行的计算公式 <br><br>
-$$dist[i]=\sqrt{(\left\|P_i\right\|^2\quad \left\|P_i\right\|^2 \cdots \left\|P_i\right\|^2)+(\left\|C_1\right\|^2 \quad \left\|C_2\right\|^2 \cdots \left\|C_N\right\|^2)-2\times P_i(C_1^T \quad C_2^T \cdots C_N^T)}\\=\sqrt{(\left\|P_i\right\|^2\quad \left\|P_i\right\|^2 \cdots \left\|P_i\right\|^2)+(\left\|C_1\right\|^2 \quad \left\|C_2\right\|^2 \cdots \left\|C_N\right\|^2)-2\times P_iC^T}$$
+![2](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l22.png)
 <br><br>
 - 继续将公式推广为整个距离矩阵(也就是完全平方公式) <br><br>
-$$dist=\sqrt{\begin{pmatrix}\left\|P_1\right\|^2 & \left\|P_1\right\|^2 & \cdots & \left\|P_1\right\|^2\\\left\|P_2\right\|^2 & \left\|P_2\right\|^2 & \cdots & \left\|P_2\right\|^2\\\vdots & \vdots & \ddots & \vdots \\\left\|P_M\right\|^2 & \left\|P_M\right\|^2 & \cdots & \left\|P_M\right\|^2 \end{pmatrix}+\begin{pmatrix}\left\|C_1\right\|^2 & \left\|C_2\right\|^2 & \cdots & \left\|C_N\right\|^2\\\left\|C_1\right\|^2 & \left\|C_2\right\|^2 & \cdots & \left\|C_N\right\|^2\\\vdots & \vdots & \ddots & \vdots \\\left\|C_1\right\|^2 & \left\|C_2\right\|^2 & \cdots & \left\|C_N\right\|^2 \end{pmatrix}-2\times PC^T}$$
+![3](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l23.png)
 
 知道距离矩阵怎么算出来的之后，在代码上只需要套公式带入就能实现了。
 
@@ -186,27 +187,24 @@ def euclideanDistance_no_loops(train_X, test_X):
     return dists
 ```
 
-是不是很简单，这里两种方法我们衡量两点间距离的标准是`欧氏距离`。如果想用其他的标准呢，比如$$L_{1}$$距离该怎么实现呢，这里我参照上面推导公式的思想得出了计算$$L_{1}$$距离的矩阵运算。
+是不是很简单，这里两种方法我们衡量两点间距离的标准是`欧氏距离`。如果想用其他的标准呢，比如![](https://chart.googleapis.com/chart?cht=tx&chl=L_{1})距离该怎么实现呢，这里我参照上面推导公式的思想得出了计算![](https://chart.googleapis.com/chart?cht=tx&chl=L_{1})距离的矩阵运算。
 
 ### L1 Distance
 
-记测试集矩阵P的大小为$$M*D$$，训练集矩阵C的大小为$$N*D$$（测试集中共有M个点，每个点为D维特征向量。训练集中共有N个点，每个点为D维特征向量） <br><br>
-记$$P_{i}$$是P的第i行$$P_i = [ P_{i1}\quad P_{i2} \cdots P_{iD}]$$，记$$C_{j}$$是C的第j行$$C_j = [ C_{j1} C_{j2} \cdots \quad C_{jD}]$$
+记测试集矩阵P的大小为![](https://chart.googleapis.com/chart?cht=tx&chl=M*D)，训练集矩阵C的大小为![](https://chart.googleapis.com/chart?cht=tx&chl=N*D)（测试集中共有M个点，每个点为D维特征向量。训练集中共有N个点，每个点为D维特征向量） <br><br>
+记![](https://chart.googleapis.com/chart?cht=tx&chl=P_{i})是P的第i行![4](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l14.png)，记![](https://chart.googleapis.com/chart?cht=tx&chl=C_{j})是C的第j行![5](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l15.png)
 - 首先计算Pi和Cj之间的距离dist(i,j)<br><br>
-$$d(P_{i}, C_{j}) = |P_{i1} - C_{j1}| + |P_{i2} - C_{j2}| + \cdots + |P_{iD} - C_{jD}|$$
+![1](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l11.png)
 
 
 - 我们可以推广到距离矩阵的第i行的计算公式 <br><br>
-$$dist[i] = \left | [P_{i}\quad P_{i} \cdots P_{i}] - [C_{1}\quad C_{2}\cdots C_{N}] \right|=[|P_{i} - C_{1}|\quad |P_{i} - C_{2}| \cdots |P_{i} - C_{N}|]$$
+![2](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l12.png)
 
 
 - 继续将公式推广为整个距离矩阵 <br><br>
-$$dist = \left |  \left[\begin{matrix}P_{1} & P_{1} & \cdots & P_{1} \cr P_{2} & P_{2} & \cdots & P_{2} \cr \vdots & \vdots & \ddots & \vdots \cr P_{M} & P_{M} & \cdots & P_{M} \end{matrix} \right]  - \left[\begin{matrix}C_{1} & C_{2} & \cdots & C_{N} \cr C_{1} & C_{2} & \cdots & C_{N} \cr \vdots & \vdots & \ddots & \vdots \cr C_{1} & C_{2} & \cdots & C_{N} \end{matrix} \right] \right | = \left [\begin{matrix} |P_{1} - C_{1}| & |P_{1} - C_{2}| & \cdots & |P_{1} - C_{N}| \cr
-|P_{2} - C_{1}| & |P_{2}-C_{2}| & \cdots & |P_{2} - C_{N}| \cr
-\vdots & \vdots & \ddots & \vdots \cr 
-|P_{M} - C_{1}| & |P_{M} - C_{2}| & \cdots & |P_{M} - C_{N}|\end{matrix}\right ]$$
+![3](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l13.png)
 
-<br>其中$$P_i = [ P_{i1}\quad P_{i2} \cdots P_{iD}]$$、$$C_j = [ C_{j1} C_{j2} \cdots \quad C_{jD}]$$
+<br>其中![4](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l14.png)、![5](https://github.com/wmpscc/ML-DL/raw/master/kNN/img/l15.png)
 
 ``` Python
 def l1_distance_no_loops(train_X, test_X):
