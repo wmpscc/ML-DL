@@ -1,9 +1,12 @@
 import pandas as pd
 import numpy as np
 import random
+from collections import Counter
 
-def load_data(path, rate = 0.8):
+
+def load_data(path, rate=0.8):
     ''' Making dataSet
+
     Args:
         path: DataSet file path.
         rate: TrainSet percentage.
@@ -23,63 +26,116 @@ def load_data(path, rate = 0.8):
     testSet.drop('name', axis=1, inplace=True)
     return np.array(trainSet), np.array(trainLabel), np.array(testSet), np.array(testLabel)
 
-def euclideanDistance(instance1, instance2):
+
+def euclideanDistance_two_loops(train_X, test_X):
     ''' Calculate two-point Euclidean distance
+
     Args:
-        instance1: Numpy array type training set.
-        instance2: The element of test set.
+        train_X: Numpy array type training set.
+        test_X: Numpy array type test set.
     Returns:
-        distance: The distance of instance2 to instance1, the type is list.
+        dists: A numpy array of shape (num_test, num_train) where dists[i, j]
+        is the Euclidean distance between the ith test point and the jth training point.
     '''
-    distance = []
-    for instance in instance1:
-        temp = np.subtract(instance, instance2)
-        temp = np.power(temp, 2)
-        temp = temp.sum()
-        distance.append(np.sqrt(temp))
-    return distance
 
-def getNeighbors(distance, label, k):
-    ''' Calculate k-nearest element
+    num_test = test_X.shape[0]
+    num_train = train_X.shape[0]
+    dists = np.zeros((num_test, num_train))
+    for i in range(num_test):
+        for j in range(num_train):
+            test_line = test_X[i]
+            train_line = train_X[j]
+            temp = np.subtract(test_line, train_line)
+            temp = np.power(temp, 2)
+            dists[i][j] = np.sqrt(temp.sum())
+    return dists
+
+
+def euclideanDistance_no_loops(train_X, test_X):
+    '''Calculate two-point Euclidean distance without loops
+
+    Input / Output: Same as euclideanDistance_two_loops
+    '''
+
+    num_test = test_X.shape[0]
+    num_train = train_X.shape[0]
+
+    sum_train = np.power(train_X, 2)
+    sum_train = sum_train.sum(axis=1)
+    sum_train = sum_train * np.ones((num_test, num_train))
+
+    sum_test = np.power(test_X, 2)
+    sum_test = sum_test.sum(axis=1)
+    sum_test = sum_test * np.ones((1, sum_train.shape[0]))
+    sum_test = sum_test.T
+
+    sum = sum_train + sum_test - 2 * np.dot(test_X, train_X.T)
+    dists = np.sqrt(sum)
+    return dists
+
+
+def l1_distance_no_loops(train_X, test_X):
+    '''Calculate two-point L1 distance
     Args:
-        distance: Return by euclideanDistance function.
-        label: Training label.
-        k: k-nearest
+        train_X: Numpy array type training set.
+        test_X: Numpy array type test set.
     Returns:
-        neighbors: The k-nearest elements.
+        dists: A numpy array of shape (num_test, num_train) where dists[i, j]
+        is the Euclidean distance between the ith test point and the jth training point.
     '''
-    df = pd.DataFrame()
-    df['distance'] = distance
-    df['label'] = label
-    neighbors = df.sort_values(by='distance').reset_index()
-    return neighbors.loc[:k-1]
 
-def getResult(neighbors):
-    neighbors = neighbors['label'].value_counts()
-    neighbors = pd.Series(neighbors).sort_values(ascending=False).reset_index()
-    return neighbors['index'][0]
+    num_test = test_X.shape[0]
+    num_train = train_X.shape[0]
 
-def getAccuracy(testData, testLabel, trainSet, trainLabel):
-    ''' Calculate accuracy percentage.
+    test = np.tile(test_X, (num_train, 1, 1))
+    train = np.tile(train_X, (num_test, 1, 1))
+    train = np.transpose(train, axes=(1, 0, 2))
+
+    sum = np.subtract(test, train)
+    sum = np.abs(sum)
+    sum = np.sum(sum, axis=2)
+    dists = sum.T
+    return dists
+
+
+def predict_labels(dists, labels, k=1):
+    ''' To predict a label for each test point.
     Args:
-        testData: Numpy array of test set.
-        testLabel: Numpy array of test labels.
-        trainSet: Numpy array of train set.
-        trainLabel: Numpy array of train labels.
-    Returns:
-        score/len(trainLabel)
-    '''
-    score = 0
-    i = 0
-    for instance in testData:
-        distance = euclideanDistance(trainSet, instance)
-        neighbors = getNeighbors(distance, trainLabel, 5)
-        result = getResult(neighbors)
-        if result == testLabel[i]:
-            score += 1
-        i += 1
-    return score/len(trainLabel)
+        dists: a numpy array of shape (num_test, num_train) where dists[i, j].
+        labels: each test point real label.
 
-if  __name__ == "__main__":
+    Returns:
+        y_pred: knn predict target label.
+    '''
+
+    num_test = dists.shape[0]
+    y_pred = []
+    for i in range(num_test):
+        index = np.argsort(dists[i])
+        index = index[:k]
+        closest_y = labels[index]
+        name, _ = Counter(closest_y).most_common(1)[0]
+        y_pred.append(name)
+    return y_pred
+
+
+def getAccuracy(y_pred, y):
+    ''' Calculate the predict accuracy.
+    Args:
+        y_pred: knn predict target label.
+        y: each test point real label.
+
+    Returns:
+        accuracy: average accuracy in test set.
+    '''
+    num_correct = np.sum(y_pred == y)
+    accuracy = float(num_correct) / len(y)
+    return accuracy
+
+
+if __name__ == "__main__":
     trainData, trainLabel, testData, testLabel = load_data("irisdata.txt", 0.67)
-    print(getAccuracy(np.array(testData), np.array(testLabel), np.array(trainData), np.array(trainLabel)))
+    dists = l1_distance_no_loops(trainData, testData)
+    y_pred = predict_labels(dists, trainLabel, k=3)
+    accuracy = getAccuracy(y_pred, testLabel)
+    print(accuracy)
