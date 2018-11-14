@@ -4,7 +4,7 @@ Machine learning and deep learning notes, practice, formula derivation.
 > 这个项目是我的学习笔记，内容还在完善中。如果遇到图片无法显示，可以下载后查看。
 # 目录
 ## 数学基础
-- ### 基础内容
+- ### [基础内容](https://github.com/wmpscc/ML-DL/blob/master/math/README.md)
   
 
 ## 机器学习
